@@ -6,27 +6,26 @@ import trans
 import add
 
 gui_menu = Tk()
-# gui_menu.geometry('150x180')
-gui_menu.title('Menu')
-gui_menu.resizable(False, False)
-frame_menu = Frame(gui_menu, highlightbackground='black', highlightthickness=1)
+gui_menu.geometry('700x700')
+gui_menu.title('Matrix Calculator')
+frame_menu = Frame(gui_menu, highlightbackground='black', bg='#F9E79F', highlightthickness=1)
 frame_menu.pack(fill=BOTH, expand=True, padx=5, pady=5)
 
 
 class Menu:
     def __init__(self):
-        label = Label(frame_menu, text="Choose Operation:", pady=10, font=('arial', 10, 'bold'))
+        label = Label(frame_menu, text="Chọn Phép Toán:", bg='#F9E79F', width=50, height=5, font=('arial', 16, 'bold'))
 
-        inv = Button(frame_menu, text="Inverse", padx=30, pady=5, command=inverse.Inverse)
-        ad = Button(frame_menu, text="Add", padx=40, pady=5, command=add.Add)
-        tran = Button(frame_menu, text="Transpose", padx=22, pady=5, command=trans.Trans)
-        mlt = Button(frame_menu, text="Multiply", padx=28, pady=5, command=multi.Multi)
-
-        label.pack()
+        inv = Button(frame_menu, text="Nghịch đảo", bg='#ADFF2F', font=('arial', 14, 'bold'), width=50, height=5, command=inverse.Inverse)
+        ad = Button(frame_menu, text="Cộng", font=('arial', 14, 'bold'), width=50, height=5, command=add.Add)
+        tran = Button(frame_menu, text="Chuyển vị", bg='#ADFF2F', font=('arial', 14, 'bold'), width=50, height=5, command=trans.Trans)
+        mlt = Button(frame_menu, text="Nhân", font=('arial', 14, 'bold'), width=50, height=5, command=multi.Multi)
+        
+        label.pack(fill=BOTH)
         inv.pack()
-        mlt.pack()
         ad.pack()
         tran.pack()
+        mlt.pack()
 
         # def on_closing():
         #      if messagebox.askokcancel("Quit", "Do you want to quit?"):

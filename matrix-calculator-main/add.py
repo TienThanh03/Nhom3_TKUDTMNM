@@ -100,7 +100,7 @@ class Add:
         self.frame_add_input.pack(fill=BOTH, expand=True, padx=5, pady=5)
 
         # create matrix A entries
-        Label(self.frame_add_input, text="Enter matrix A:", font=('arial', 10, 'bold')).grid(row=1, column=1)
+        Label(self.frame_add_input, text="Nhap ma tran A:", font=('arial', 10, 'bold')).grid(row=1, column=1)
 
         text_var = []
         entries = []
@@ -132,7 +132,7 @@ class Add:
                 Label(self.frame_add_input, text=i + 1).grid(row=i + 2, column=1, sticky='e')
 
         # do the same for matrix_b
-        Label(self.frame_add_input, text="Enter matrix B:", font=('arial', 10, 'bold')).grid(row=self.rows_get * 2,
+        Label(self.frame_add_input, text="Nhap ma tran B:", font=('arial', 10, 'bold')).grid(row=self.rows_get * 2,
                                                                                              column=1)
         text_var_b = []
         entries_b = []
@@ -200,7 +200,7 @@ class Add:
         self.frame_add_menu.pack(fill=BOTH, expand=True, padx=5, pady=5)
 
         # prompt matrix dimensions
-        Label(self.frame_add_menu, text='Matrix dimensions:', font=('arial', 10, 'bold'))\
+        Label(self.frame_add_menu, text='Kich thuoc ma tran:', font=('arial', 10, 'bold'))\
             .grid(row=3, column=1, columnspan=1)
 
         # create var for rows

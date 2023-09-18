@@ -5,7 +5,6 @@ import menu
 
 alphabet = 'abcdefghijklmnopqrstuvwxyz'
 
-
 class Inverse:
     def back_to_menu(self):
         self.gui_inverse_output.destroy()
@@ -40,14 +39,14 @@ class Inverse:
         # create window
         self.gui_inverse_input.destroy()
         self.gui_inverse_output = Toplevel()
-        self.gui_inverse_output.title("Inverse")
-        self.gui_inverse_output.resizable(False, False)
+        self.gui_inverse_output.title("Matrix Calculator")
+        #self.gui_inverse_output.resizable(False, False)
 
         self.frame_inverse_output = Frame(self.gui_inverse_output, highlightbackground='black', highlightthickness=1)
         self.frame_inverse_output.pack(fill=BOTH, expand=True, padx=5, pady=5)
 
         # go back to menu button
-        Button(self.frame_inverse_output, text="Back", width=4, command=self.back_to_menu).grid(
+        Button(self.frame_inverse_output, text="Back",font=('arial', 10, 'bold'), width=4, command=self.back_to_menu).grid(
             row=self.rows + 10,
             column=1)
 
@@ -75,8 +74,7 @@ class Inverse:
     def input_matrix(self):
         self.gui_inverse_menu.destroy()
         self.gui_inverse_input = Toplevel()
-        self.gui_inverse_input.title("Inverse")
-        self.gui_inverse_input.resizable(False, False)
+        self.gui_inverse_input.title("Matric Calculator")
 
         self.frame_inverse_input = Frame(self.gui_inverse_input, highlightbackground='black', highlightthickness=1)
         self.frame_inverse_input.pack(fill=BOTH, expand=True, padx=5, pady=5)
@@ -129,7 +127,6 @@ class Inverse:
                 self.output_matrix()
 
             except (ValueError, Exception):
-                # Label(self.frame_inverse_output, text="Invalid input(s)").grid(row=1, column=2)
                 Label(self.frame_inverse_output, text="(Your matrix is").grid(row=1, column=self.cols * 2 + 1)
                 Label(self.frame_inverse_output, text="not invertible!)").grid(row=2, column=self.cols * 2 + 1)
 
