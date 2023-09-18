@@ -25,7 +25,8 @@ class Trans:
             return list_mat
 
         except (TypeError, Exception):
-            pass
+            Label(self.frame_trans_output, text="Ma trận của bạn").grid(row=1, column=self.cols_get * 2 + 10)
+            Label(self.frame_trans_output, text="Không hợp lệ!").grid(row=2, column=self.cols_get * 2 + 10)
 
     def output_matrix(self):
         self.gui_trans_input.destroy()

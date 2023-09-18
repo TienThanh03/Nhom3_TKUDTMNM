@@ -32,8 +32,8 @@ class Inverse:
             return list_mat
 
         except (TypeError, Exception):
-            Label(self.frame_inverse_output, text="(Your matrix is").grid(row=1, column=self.cols * 2 + 1)
-            Label(self.frame_inverse_output, text="not invertible!)").grid(row=2, column=self.cols * 2 + 1)
+            Label(self.frame_inverse_output, text="Ma trận của bạn").grid(row=1, column=self.cols * 2 + 1)
+            Label(self.frame_inverse_output, text="Không hợp lệ!").grid(row=2, column=self.cols * 2 + 1)
 
     def output_matrix(self):
         # create window
