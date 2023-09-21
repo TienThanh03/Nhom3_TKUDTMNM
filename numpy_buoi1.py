@@ -1,10 +1,14 @@
 import numpy as np
 import tkinter as tk
-from tkinter import Entry, Label, Button
+from tkinter import Entry, Label, Button, messagebox
 
 def solve_linear_equation():
     try:
         n = int(variable_n.get())
+        if n <= 0:
+            messagebox.showerror("Lỗi", "Vui lòng nhập số nguyên dương n")
+            return
+
         A_values = []
         B_values = []
 
@@ -12,22 +16,34 @@ def solve_linear_equation():
         for i in range(n):
             A_row = []
             for j in range(n):
-                A_row.append(float(A_entries[i][j].get()))
+                a_value = A_entries[i][j].get().strip()
+                if not a_value:
+                    messagebox.showerror("Lỗi", f"Vui lòng nhập giá trị cho A[{i + 1},{j + 1}]")
+                    return
+                A_row.append(float(a_value))
             A_values.append(A_row)
 
         # Lấy giá trị ma trận B từ input
         for i in range(n):
-            B_values.append(float(B_entries[i].get()))
+            b_value = B_entries[i].get().strip()
+            if not b_value:
+                messagebox.showerror("Lỗi", f"Vui lòng nhập giá trị cho B[{i + 1}]")
+                return
+            B_values.append(float(b_value))
 
         A = np.array(A_values)
         B = np.array(B_values)
-        A_inv = np.linalg.inv(A)
 
-        X = np.dot(A_inv, B)
+        if np.linalg.matrix_rank(A) != np.linalg.matrix_rank(np.column_stack((A, B))):
+            messagebox.showinfo("Thông báo", "Hệ phương trình có vô số nghiệm hoặc vô nghiệm")
+            return
 
-        result_label.config(text=f'Nghiệm của hệ: {X}')
+        X = np.linalg.solve(A, B)
+        messagebox.showinfo("Kết quả", f'Nghiệm của hệ: {X}')
+    except ValueError:
+        messagebox.showerror("Lỗi", "Vui lòng nhập số nguyên dương n")
     except Exception as e:
-        result_label.config(text=f'Lỗi: {str(e)}')
+        messagebox.showerror("Lỗi", f'Lỗi: {str(e)}')
 
 # Tạo cửa sổ tkinter
 root = tk.Tk()
@@ -46,37 +62,44 @@ B_entries = []
 
 def create_input_fields():
     global A_entries, B_entries
-    n = int(variable_n.get())
+    try:
+        n = int(variable_n.get())
+        if n <= 0:
+            messagebox.showerror("Lỗi", "Vui lòng nhập số nguyên dương n")
+            return
 
-    # Xóa các widgets cũ (nếu có)
-    for widget in root.winfo_children():
-        widget.grid_forget()
+        # Xóa các widgets cũ (nếu có)
+        for widget in root.winfo_children():
+            widget.grid_forget()
 
-    # Tạo lại các widgets mới
-    for i in range(n):
-        A_row_entries = []
-        for j in range(n):
-            label = Label(root, text=f'A[{i + 1},{j + 1}]:')
-            entry = Entry(root)
-            label.grid(row=i, column=j * 2)
-            entry.grid(row=i, column=j * 2 + 1)
-            A_row_entries.append(entry)
-        A_entries.append(A_row_entries)
+        # Tạo lại các widgets mới
+        for i in range(n):
+            A_row_entries = []
+            for j in range(n):
+                label = Label(root, text=f'A[{i + 1},{j + 1}]:')
+                entry = Entry(root)
+                label.grid(row=i, column=j * 2)
+                entry.grid(row=i, column=j * 2 + 1)
+                A_row_entries.append(entry)
+            A_entries.append(A_row_entries)
 
-    B_label = Label(root, text="Ma trận B:")
-    B_label.grid(row=n, column=0)
-    B_entries = [Entry(root) for _ in range(n)]
-    for i in range(n):
-        B_entries[i].grid(row=n, column=i * 2 + 1)
+        B_label = Label(root, text="Ma trận B:")
+        B_label.grid(row=n, column=0)
+        B_entries = [Entry(root) for _ in range(n)]
+        for i in range(n):
+            B_entries[i].grid(row=n, column=i * 2 + 1)
 
-    # Tạo nút giải hệ
-    solve_button = Button(root, text="Giải", command=solve_linear_equation)
-    solve_button.grid(row=n + 1, columnspan=n * 2)
+        # Tạo nút giải hệ
+        solve_button = Button(root, text="Giải", command=solve_linear_equation)
+        solve_button.grid(row=n + 1, columnspan=n * 2)
 
-    # Kết quả
-    global result_label
-    result_label = Label(root, text="")
-    result_label.grid(row=n + 2, columnspan=n * 2)
+        # Kết quả
+        global result_label
+        result_label = Label(root, text="")
+        result_label.grid(row=n + 2, columnspan=n * 2)
+
+    except ValueError:
+        messagebox.showerror("Lỗi", "Vui lòng nhập số nguyên dương n")
 
 # Tạo nút để tạo các trường nhập dữ liệu A và B dựa trên n
 create_fields_button = Button(root, text="Nhập Dữ Liệu", command=create_input_fields)
