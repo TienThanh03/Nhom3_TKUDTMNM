@@ -1,7 +1,14 @@
 import numpy as np
 import tkinter as tk
-from tkinter import Entry, Label, Button, messagebox
+from tkinter import Entry, Label, Button, messagebox, Toplever
 
+def show_result(result):
+    result_window = Toplevel(root)
+    result_window.title("Kết Quả")
+
+    result_label = Label(result_window, text=result, font=("Helvetica", 12))
+    result_label.pack(padx=20, pady=20)
+    
 def solve_linear_equation():
     try:
         n = int(variable_n.get())
@@ -39,7 +46,8 @@ def solve_linear_equation():
             return
 
         X = np.linalg.solve(A, B)
-        messagebox.showinfo("Kết quả", f'Nghiệm của hệ: {X}')
+         result_text = f'Nghiệm của hệ: {X}'
+        show_result(result_text)
     except ValueError:
         messagebox.showerror("Lỗi", "Vui lòng nhập số nguyên dương n")
     except Exception as e:
