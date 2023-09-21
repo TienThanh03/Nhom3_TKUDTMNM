@@ -1,6 +1,6 @@
 import numpy as np
 import tkinter as tk
-from tkinter import Entry, Label, Button, messagebox, Toplever
+from tkinter import Entry, Label, Button, messagebox, Toplevel
 
 def show_result(result):
     result_window = Toplevel(root)
