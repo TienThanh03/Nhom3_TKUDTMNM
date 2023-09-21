@@ -46,7 +46,7 @@ def solve_linear_equation():
             return
 
         X = np.linalg.solve(A, B)
-         result_text = f'Nghiệm của hệ: {X}'
+        result_text = f'Nghiệm của hệ: {X}'
         show_result(result_text)
     except ValueError:
         messagebox.showerror("Lỗi", "Vui lòng nhập số nguyên dương n")
