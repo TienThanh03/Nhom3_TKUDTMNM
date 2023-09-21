@@ -100,12 +100,7 @@ def create_input_fields():
         # Tạo nút giải hệ
         solve_button = Button(root, text="Giải", command=solve_linear_equation)
         solve_button.grid(row=n + 1, columnspan=n * 2)
-
-        # Kết quả
-        global result_label
-        result_label = Label(root, text="")
-        result_label.grid(row=n + 2, columnspan=n * 2)
-
+        
     except ValueError:
         messagebox.showerror("Lỗi", "Vui lòng nhập số nguyên dương n")
 
