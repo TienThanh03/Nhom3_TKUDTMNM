@@ -40,15 +40,9 @@ class Inverse:
         self.gui_inverse_input.destroy()
         self.gui_inverse_output = Toplevel()
         self.gui_inverse_output.title("Matrix Calculator")
-        #self.gui_inverse_output.resizable(False, False)
 
         self.frame_inverse_output = Frame(self.gui_inverse_output, highlightbackground='black', highlightthickness=1)
         self.frame_inverse_output.pack(fill=BOTH, expand=True, padx=5, pady=5)
-
-        # go back to menu button
-        Button(self.frame_inverse_output, text="Back",font=('arial', 10, 'bold'), width=4, command=self.back_to_menu).grid(
-            row=self.rows + 10,
-            column=1)
 
         # display user input
         Label(self.frame_inverse_output, text='Input:', font=('arial', 10, 'bold'), underline=0).grid(row=1, column=1)
@@ -58,18 +52,24 @@ class Inverse:
 
         # display output
         Label(self.frame_inverse_output, text='Inverted:', font=('arial', 10, 'bold'), underline=0).grid(row=1,
-                                                                                                       column=self.cols * 2)
+                                                                                                         column=self.cols * 2)
 
         inverse_matrix = self.compute_inverse()
         for i in range(self.rows):
             Label(self.frame_inverse_output, text=inverse_matrix[i], bd=5).grid(
                 row=i + 1, column=self.cols * 2 + 1)
 
-        # def disable_event():
-        #    pass
+        # Back button
+        Button(self.frame_inverse_output, text="Back", command=self.back_to_input).grid(row=self.rows + 2, column=2,)
+        # go back to menu button
+        Button(self.frame_inverse_output, text="Back to Menu", font=('arial', 10, 'bold'), width=15, command=self.back_to_menu).grid(row=self.rows + 5,column=2)
 
-        self.gui_inverse_output.protocol("WM_DELETE_WINDOW", menu.gui_menu.destroy)
+        self.gui_inverse_output.protocol("WM_DELETE_WINDOW", self.back_to_input)
         self.gui_inverse_output.mainloop()
+
+    def back_to_input(self):
+        self.gui_inverse_output.destroy()
+        self.input_matrix()
 
     def input_matrix(self):
         self.gui_inverse_menu.destroy()
@@ -116,7 +116,6 @@ class Inverse:
 
         # callback function to get StringVars/convert them to strings
         # and store in matrix[]
-
         def get_mat():
             try:
                 self.matrix = []
@@ -132,9 +131,20 @@ class Inverse:
 
         Button(self.frame_inverse_input, text="Enter", width=8, command=get_mat).grid(row=self.cols + 10,
                                                                                       column=1)
+        Button(self.frame_inverse_input, text="Back", width=8, command=self.back_to_dimensions).grid(row=self.cols + 11,
+                                                                                                   column=1)
+        # go back to menu button
+        Button(self.frame_inverse_input, text="Back to Menu", font=('arial', 10, 'bold'), width=15,command=self.back_to_menu).grid(row=self.cols + 12,column=1)
 
         self.gui_inverse_input.protocol("WM_DELETE_WINDOW", menu.gui_menu.destroy)
         self.gui_inverse_input.mainloop()
+
+    def back_to_dimensions(self):
+        self.gui_inverse_input.destroy()
+        self.__init__()
+    def back_to_menu(self):
+        self.gui_inverse_input.destroy()
+        menu.gui_menu.deiconify()
 
     def __init__(self):
         self.gui_inverse_input, self.gui_inverse_output = None, None
@@ -161,5 +171,13 @@ class Inverse:
 
         Button(self.frame_inverse_menu, text='Enter', padx=16, pady=5, command=self.input_matrix).grid(row=5, column=2)
 
+        #BACK TO MENU
+        Button(self.frame_inverse_menu, text="Back to Menu", font=('arial', 10, 'bold'), width=15,command=self.back_to_menu).grid(row=6, column=2)
+
+
         self.gui_inverse_menu.protocol("WM_DELETE_WINDOW", menu.gui_menu.destroy)
         self.gui_inverse_menu.mainloop()
+
+    def back_to_menu(self):
+        self.gui_inverse_menu.destroy()
+        menu.gui_menu.deiconify()
