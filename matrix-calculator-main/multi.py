@@ -55,7 +55,11 @@ class Multi:
         self.frame_multi_output.pack(fill=BOTH, expand=True, padx=5, pady=5)
 
         # go back to menu button
-        Button(self.frame_multi_output, text="Back", width=4, command=self.back_to_menu).grid(
+        Button(self.frame_multi_output, text="Back to Menu", width=15, command=self.back_to_menu).grid(
+            row=self.rows_a + self.rows_b + 11,
+            column=1)
+
+        Button(self.frame_multi_output, text="Back", width=5, command=self.back_to_input).grid(
             row=self.rows_a + self.rows_b + 10,
             column=1)
 
@@ -91,6 +95,10 @@ class Multi:
         # gui stuff
         self.gui_multi_output.protocol("WM_DELETE_WINDOW", menu.gui_menu.destroy)
         self.gui_multi_output.mainloop()
+
+    def back_to_input(self):
+        self.gui_multi_output.destroy()
+        self.input_matrix()
 
     def input_matrix(self):
         # create input window
@@ -185,11 +193,24 @@ class Multi:
 
         # button to trigger the entire thing
         Button(self.frame_multi_input, text="Enter", width=8, command=get_mat).grid(row=self.cols_a + self.cols_b + 10,
-                                                                                    column=1)
+                                                                                    column=2)
+
+        Button(self.frame_multi_input, text="Back", width=8, command=self.back_to_dimensions).grid(
+            row=self.cols_a + self.cols_b + 11,column=2)
+        # go back to menu button
+        Button(self.frame_multi_input, text="Back to Menu", font=('arial', 10, 'bold'), width=15,
+               command=self.back_to_menu).grid(row=self.cols_a + self.cols_b + 12,column=2)
 
         # gui stuff
         self.gui_multi_input.protocol("WM_DELETE_WINDOW", menu.gui_menu.destroy)
         self.gui_multi_input.mainloop()
+
+    def back_to_menu(self):
+        self.gui_multi_input.destroy()
+        menu.gui_menu.deiconify()
+    def back_to_dimensions(self):
+        self.gui_multi_input.destroy()
+        self.__init__()
 
     def __init__(self):
         # pre-declare variables
@@ -251,8 +272,15 @@ class Multi:
         OptionMenu(self.frame_multi_menu, self.mb_cols, *range(2, 5)).grid(row=4, column=4)
 
         # in order to move to input window
-        Button(self.frame_multi_menu, text='Enter', padx=16, pady=5, command=self.input_matrix).grid(row=5, column=4)
+        Button(self.frame_multi_menu, text='Enter', padx=16, pady=5, command=self.input_matrix).grid(row=5, column=2)
+
+        Button(self.frame_multi_menu, text="Back to Menu", font=('arial', 10, 'bold'), width=15,
+               command=self.back_to_menu).grid(row=6, column=2)
 
         # gui stuff
         self.gui_multi_menu.protocol("WM_DELETE_WINDOW", menu.gui_menu.destroy)
         self.gui_multi_menu.mainloop()
+
+    def back_to_menu(self):
+        self.gui_multi_menu.destroy()
+        menu.gui_menu.deiconify()
