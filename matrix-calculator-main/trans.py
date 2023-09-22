@@ -37,9 +37,11 @@ class Trans:
         self.frame_trans_output = Frame(self.gui_trans_output, highlightbackground='black', highlightthickness=1)
         self.frame_trans_output.pack(fill=BOTH, expand=True, padx=5, pady=5)
 
+        # Back button
+        Button(self.frame_trans_output, text="Back", command=self.back_to_input).grid( row=self.rows_get + self.rows_get + 10, column=2)
         # go back to menu button
-        Button(self.frame_trans_output, text="Back", width=4, command=self.back_to_menu).grid(
-            row=self.rows_get + self.rows_get + 10, column=1)
+        Button(self.frame_trans_output, text="Back to Menu", font=('arial', 10, 'bold'), width=15,
+               command=self.back_to_menu).grid( row=self.rows_get + self.rows_get + 11, column=2)
 
         Label(self.frame_trans_output, text='Input:', font=('arial', 10, 'bold'), underline=0).grid(row=1, column=1)
         for i in range(self.rows_get):
@@ -58,6 +60,10 @@ class Trans:
 
         self.gui_trans_output.protocol("WM_DELETE_WINDOW", menu.gui_menu.destroy)
         self.gui_trans_output.mainloop()
+
+    def back_to_input(self):
+        self.gui_trans_output.destroy()
+        self.input_matrix()
 
     def input_matrix(self):
         self.gui_trans_menu.destroy()
@@ -108,10 +114,23 @@ class Trans:
                 pass
 
         Button(self.frame_trans_input, text="Enter", width=8, command=get_mat)\
-            .grid(row=self.cols_get + self.cols_get + 10, column=1)
+            .grid(row=self.cols_get + self.cols_get + 10, column=2)
+
+        Button(self.frame_trans_input, text="Back", width=8, command=self.back_to_dimensions).grid(row=self.cols_get + self.cols_get + 11, column=2)
+        # go back to menu button
+        Button(self.frame_trans_input, text="Back to Menu", font=('arial', 10, 'bold'), width=15,
+               command=self.back_to_menu).grid(row=self.cols_get + self.cols_get + 12, column=2)
 
         self.gui_trans_input.protocol("WM_DELETE_WINDOW", menu.gui_menu.destroy)
         self.gui_trans_input.mainloop()
+
+    def back_to_dimensions(self):
+        self.gui_trans_input.destroy()
+        self.__init__()
+    def back_to_menu(self):
+        self.gui_trans_input.destroy()
+        menu.gui_menu.deiconify()
+
 
     def __init__(self):
         self.gui_trans_input = None
@@ -143,7 +162,14 @@ class Trans:
         self.cols.set(2)
         OptionMenu(self.frame_trans_menu, self.cols, *range(2, 5)).grid(row=1, column=4)
 
-        Button(self.frame_trans_menu, text='Enter', padx=16, pady=5, command=self.input_matrix).grid(row=2, column=4)
+        Button(self.frame_trans_menu, text='Enter', padx=16, pady=5, command=self.input_matrix).grid(row=2, column=2)
+
+        # BACK TO MENU
+        Button(self.frame_trans_menu, text="Back to Menu", font=('arial', 10, 'bold'), width=15,
+               command=self.back_to_menu).grid(row=3, column=2)
 
         self.gui_trans_menu.protocol("WM_DELETE_WINDOW", menu.gui_menu.destroy)
         self.gui_trans_menu.mainloop()
+    def back_to_menu(self):
+        self.gui_trans_menu.destroy()
+        menu.gui_menu.deiconify()
