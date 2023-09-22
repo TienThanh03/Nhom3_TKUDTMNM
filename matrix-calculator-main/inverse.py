@@ -126,9 +126,9 @@ class Inverse:
                 self.output_matrix()
 
             except (ValueError, Exception):
-                Label(self.frame_inverse_output, text="(Your matrix is").grid(row=1, column=self.cols * 2 + 1)
-                Label(self.frame_inverse_output, text="not invertible!)").grid(row=2, column=self.cols * 2 + 1)
-
+                Label(self.frame_inverse_output, text="Ma trận của bạn").grid(row=1, column=self.cols * 2 + 1)
+                Label(self.frame_inverse_output, text="không hợp lệ!").grid(row=2, column=self.cols * 2 + 1)  
+                
         Button(self.frame_inverse_input, text="Enter", width=8, command=get_mat).grid(row=self.cols + 10,
                                                                                       column=1)
         Button(self.frame_inverse_input, text="Back", width=8, command=self.back_to_dimensions).grid(row=self.cols + 11,
