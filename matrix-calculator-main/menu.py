@@ -20,12 +20,14 @@ class Menu:
         ad = Button(frame_menu, text="Cộng", font=('arial', 14, 'bold'), width=50, height=5, command=add.Add)
         tran = Button(frame_menu, text="Chuyển vị", bg='#ADFF2F', font=('arial', 14, 'bold'), width=50, height=5, command=trans.Trans)
         mlt = Button(frame_menu, text="Nhân", font=('arial', 14, 'bold'), width=50, height=5, command=multi.Multi)
+        Exit = Button(frame_menu, text="Exit", padx=15, pady=5, command=exit)
         
         label.pack(fill=BOTH)
         inv.pack()
         ad.pack()
         tran.pack()
         mlt.pack()
+        Exit.pack()
 
         # def on_closing():
         #      if messagebox.askokcancel("Quit", "Do you want to quit?"):
