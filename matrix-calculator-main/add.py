@@ -53,9 +53,11 @@ class Add:
         self.frame_add_output = Frame(self.gui_add_output, highlightbackground='black', highlightthickness=1)
         self.frame_add_output.pack(fill=BOTH, expand=True, padx=5, pady=5)
 
+        # Back button
+        Button(self.frame_add_output, text="Back",width=5, command=self.back_to_input).grid(row=self.rows_get + self.rows_get + 10, column=2)
         # go back to menu button
-        Button(self.frame_add_output, text="Back", width=4, command=self.back_to_menu).grid(
-            row=self.rows_get + self.rows_get + 10, column=1)
+        Button(self.frame_add_output, text="Back to Menu", width=15, command=self.back_to_menu).grid(
+            row=self.rows_get + self.rows_get + 11, column=2)
 
         # display matrix_a input
         Label(self.frame_add_output, text='Matrix A:', font=('arial', 10, 'bold'), underline=0).grid(row=1, column=1)
@@ -88,6 +90,10 @@ class Add:
         # gui stuff
         self.gui_add_output.protocol("WM_DELETE_WINDOW", menu.gui_menu.destroy)
         self.gui_add_output.mainloop()
+
+    def back_to_input(self):
+        self.gui_add_output.destroy()
+        self.input_matrix()
 
     def input_matrix(self):
         # create input window
@@ -176,10 +182,19 @@ class Add:
         Button(self.frame_add_input, text="Enter", width=8, command=get_mat)\
             .grid(row=self.cols_get + self.cols_get + 10, column=1)
 
+        Button(self.frame_add_input, text="Back", width=8, command=self.back_to_dimensions).grid(row=self.cols_get + self.cols_get + 11, column=1)
+        # go back to menu button
+        Button(self.frame_add_input, text="Back to Menu", font=('arial', 10, 'bold'), width=15,
+               command=self.back_to_menu).grid(row=self.cols_get + self.cols_get + 12, column=1)
         # gui stuff
         self.gui_add_input.protocol("WM_DELETE_WINDOW", menu.gui_menu.destroy)
         self.gui_add_input.mainloop()
-
+    def back_to_dimensions(self):
+        self.gui_add_input.destroy()
+        self.__init__()
+    def back_to_menu(self):
+        self.gui_add_input.destroy()
+        menu.gui_menu.deiconify()
     def __init__(self):
         # prototype the variables to be used
         self.gui_add_input = None
@@ -222,8 +237,14 @@ class Add:
         OptionMenu(self.frame_add_menu, self.cols, *range(2, 5)).grid(row=3, column=4)
 
         # button to next window
-        Button(self.frame_add_menu, text='Enter', padx=16, pady=5, command=self.input_matrix).grid(row=5, column=4)
+        Button(self.frame_add_menu, text='Enter', padx=16, pady=5, command=self.input_matrix).grid(row=5, column=2)
+
+        Button(self.frame_add_menu, text="Back to Menu", font=('arial', 10, 'bold'), width=15,
+               command=self.back_to_menu).grid(row=6, column=2)
 
         # gui stuff
         self.gui_add_menu.protocol("WM_DELETE_WINDOW", menu.gui_menu.destroy)
         self.gui_add_menu.mainloop()
+    def back_to_menu(self):
+        self.gui_add_menu.destroy()
+        menu.gui_menu.deiconify()
