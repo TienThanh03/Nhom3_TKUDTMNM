@@ -6,9 +6,9 @@ import menu
 alphabet = 'abcdefghijklmnopqrstuvwxyz'
 
 class Inverse:
-    def back_to_menu(self):
+    def back_to_menu_from_output(self):
         self.gui_inverse_output.destroy()
-        menu.gui_menu.deiconify()
+        menu.gui_menu.deiconify() # đưa cửa sổ bị ẩn hoặc thu nhỏ hiển thị trở lại
 
     def compute_inverse(self):
         # convert matrix of strings to integers
@@ -32,37 +32,37 @@ class Inverse:
             return list_mat
 
         except (TypeError, Exception):
-            Label(self.frame_inverse_output, text="Ma trận của bạn").grid(row=1, column=self.cols * 2 + 1)
-            Label(self.frame_inverse_output, text="Không hợp lệ!").grid(row=2, column=self.cols * 2 + 1)
+            pass
+            # Label(self.frame_inverse_output, text="Ma trận của bạn", font=('arial', 12, 'bold'), bg='red').grid(row=1, column=self.cols * 2 + 1)
+            # Label(self.frame_inverse_output, text="Không hợp lệ!", font=('arial', 12, 'bold'), bg='red').grid(row=2, column=self.cols * 2 + 1)
 
     def output_matrix(self):
         # create window
         self.gui_inverse_input.destroy()
-        self.gui_inverse_output = Toplevel()
+        self.gui_inverse_output = Toplevel() # tạo ra một cửa sổ mới
         self.gui_inverse_output.title("Matrix Calculator")
 
-        self.frame_inverse_output = Frame(self.gui_inverse_output, highlightbackground='black', highlightthickness=1)
+        self.frame_inverse_output = Frame(self.gui_inverse_output, highlightbackground='black', highlightthickness=1, padx=5, pady=5)
         self.frame_inverse_output.pack(fill=BOTH, expand=True, padx=5, pady=5)
 
         # display user input
-        Label(self.frame_inverse_output, text='Input:', font=('arial', 10, 'bold'), underline=0).grid(row=1, column=1)
+        Label(self.frame_inverse_output, text='Input:', font=('arial', 12, 'bold'), underline=0).grid(row=0, column=0)
         for i in range(self.rows):
             for j in range(self.cols):
-                Label(self.frame_inverse_output, text=self.matrix[i][j], bd=5).grid(row=i + 1, column=j + 2)
+                Label(self.frame_inverse_output, text=self.matrix[i][j], font=('arial', 12, 'bold'), bd=5).grid(row=i, column=j + 1, sticky='news', padx=5, pady=5)
 
         # display output
-        Label(self.frame_inverse_output, text='Inverted:', font=('arial', 10, 'bold'), underline=0).grid(row=1,
-                                                                                                         column=self.cols * 2)
+        Label(self.frame_inverse_output, text='Inverted:', font=('arial', 12, 'bold'), underline=0).grid(row=0, column=self.cols + 2)
 
         inverse_matrix = self.compute_inverse()
         for i in range(self.rows):
-            Label(self.frame_inverse_output, text=inverse_matrix[i], bd=5).grid(
-                row=i + 1, column=self.cols * 2 + 1)
+            Label(self.frame_inverse_output, text=inverse_matrix[i], font=('arial', 12, 'bold'), bd=5).grid(row=i, column=self.cols + 3, sticky='news', padx=5, pady=5)
 
-        # Back button
-        Button(self.frame_inverse_output, text="Back", command=self.back_to_input).grid(row=self.rows + 2, column=2,)
-        # go back to menu button
-        Button(self.frame_inverse_output, text="Back to Menu", font=('arial', 10, 'bold'), width=15, command=self.back_to_menu).grid(row=self.rows + 5,column=2)
+        self.frame_button = Frame(self.gui_inverse_output, bg='#F9E79F', highlightbackground='black', highlightthickness=1, padx=5, pady=5)
+        self.frame_button.pack(fill='x', expand=True, padx=5, pady=5)
+        Button(self.frame_button, text="Back", font=('arial', 10, 'bold'), width=11, activebackground='green', command=self.back_to_input).grid(row=0, column=1, sticky='e', padx=14)
+        Button(self.frame_button, text="Back to Menu", font=('arial', 10, 'bold'), activebackground='green', command=self.back_to_menu_from_output).grid(row=0, column=0, sticky='e', padx=14)
+        Button(self.frame_button, text="Exit", font=('arial', 10, 'bold'), width=11, activebackground='green', command=exit).grid(row=0, column=2, sticky='e', padx=14)
 
         self.gui_inverse_output.protocol("WM_DELETE_WINDOW", self.back_to_input)
         self.gui_inverse_output.mainloop()
@@ -74,16 +74,12 @@ class Inverse:
     def input_matrix(self):
         self.gui_inverse_menu.destroy()
         self.gui_inverse_input = Toplevel()
-        self.gui_inverse_input.title("Matric Calculator")
+        self.gui_inverse_input.title("Matrix Calculator")
 
-        self.frame_inverse_input = Frame(self.gui_inverse_input, highlightbackground='black', highlightthickness=1)
-        self.frame_inverse_input.pack(fill=BOTH, expand=True, padx=5, pady=5)
-        # window_dimensions = str(self.m_length.get()**3+90) + "x" + str(self.m_height.get())
-        # print(window_dimensions)
-        # window.geometry(window_dimensions)
-        # self.gui_inverse_input.resizable(False, False)
+        self.frame_inverse_input = Frame(self.gui_inverse_input, bg='#F9E79F', highlightbackground='black', highlightthickness=1, padx=5, pady=5)
+        self.frame_inverse_input.pack(fill=BOTH, expand=True, padx=5)
 
-        Label(self.frame_inverse_input, text="Enter matrix:", font=('arial', 10, 'bold')).grid(row=1, column=1)
+        Label(self.frame_inverse_input, text="Matrix:", bg='#F9E79F', font=('arial', 12, 'bold')).grid(row=0, column=0, sticky='news')
 
         # to create matrix of entry cells we need to create a 2d list of entries
         # thank god to stackoverflow peeps for that
@@ -100,19 +96,19 @@ class Inverse:
             for j in range(self.cols):
                 # for column indications
                 if i == 1:
-                    Label(self.frame_inverse_input, text=alphabet[j]).grid(row=1, column=j + 2)
+                    Label(self.frame_inverse_input, text=j + 1, bg='#F9E79F').grid(row=0, column=j + 1)
 
                 # append StringVar
                 text_var[i].append(StringVar())
 
                 # append the entry into the list
-                entries[i].append(Entry(self.frame_inverse_input, textvariable=text_var[i][j], width=3))
+                entries[i].append(Entry(self.frame_inverse_input, textvariable=text_var[i][j], width=10, font=('arial', 10, 'bold')))
 
                 # display entry
-                entries[i][j].grid(row=i + 2, column=j + 2)
+                entries[i][j].grid(row=i + 1, column=j + 1)
 
                 # for row indications
-                Label(self.frame_inverse_input, text=i + 1).grid(row=i + 2, column=1, sticky='e')
+                Label(self.frame_inverse_input, text=i + 1, bg='#F9E79F').grid(row=i + 1, column=0, sticky='e')
 
         # callback function to get StringVars/convert them to strings
         # and store in matrix[]
@@ -128,13 +124,12 @@ class Inverse:
             except (ValueError, Exception):
                 Label(self.frame_inverse_output, text="Ma trận của bạn").grid(row=1, column=self.cols * 2 + 1)
                 Label(self.frame_inverse_output, text="không hợp lệ!").grid(row=2, column=self.cols * 2 + 1)  
-                
-        Button(self.frame_inverse_input, text="Enter", width=8, command=get_mat).grid(row=self.cols + 10,
-                                                                                      column=1)
-        Button(self.frame_inverse_input, text="Back", width=8, command=self.back_to_dimensions).grid(row=self.cols + 11,
-                                                                                                   column=1)
-        # go back to menu button
-        Button(self.frame_inverse_input, text="Back to Menu", font=('arial', 10, 'bold'), width=15,command=self.back_to_menu).grid(row=self.cols + 12,column=1)
+        
+        self.frame_button = Frame(self.gui_inverse_input, bg='#F9E79F', highlightbackground='black', highlightthickness=1, padx=5, pady=5)
+        self.frame_button.pack(fill='x', expand=True, padx=5, pady=5)
+        Button(self.frame_button, text="Enter", font=('arial', 10, 'bold'), width=11, activebackground='green', command=get_mat).grid(row=0, column=2, sticky='e', padx=14)
+        Button(self.frame_button, text="Back", font=('arial', 10, 'bold'), width=11, activebackground='green', command=self.back_to_dimensions).grid(row=0, column=1, sticky='e', padx=14)
+        Button(self.frame_button, text="Back to Menu", font=('arial', 10, 'bold'), activebackground='green', command=self.back_to_menu_from_input).grid(row=0, column=0, sticky='e', padx=14)
 
         self.gui_inverse_input.protocol("WM_DELETE_WINDOW", menu.gui_menu.destroy)
         self.gui_inverse_input.mainloop()
@@ -142,7 +137,8 @@ class Inverse:
     def back_to_dimensions(self):
         self.gui_inverse_input.destroy()
         self.__init__()
-    def back_to_menu(self):
+
+    def back_to_menu_from_input(self):
         self.gui_inverse_input.destroy()
         menu.gui_menu.deiconify()
 
@@ -154,30 +150,29 @@ class Inverse:
         self.rows, self.cols = None, None
         self.matrix = None
 
-        menu.gui_menu.withdraw()
+        menu.gui_menu.withdraw() # loại bỏ cửa sổ menu
         self.gui_inverse_menu = Toplevel()
         self.gui_inverse_menu.title("Inverse")
+        self.gui_inverse_menu.geometry('400x300')
         self.gui_inverse_menu.resizable(False, False)
 
-        self.frame_inverse_menu = Frame(self.gui_inverse_menu, highlightbackground='black', highlightthickness=1)
+        self.frame_inverse_menu = Frame(self.gui_inverse_menu, highlightbackground='black', padx=5, pady=5, bg='#F9E79F', highlightthickness=1)
         self.frame_inverse_menu.pack(fill=BOTH, expand=True, padx=5, pady=5)
 
-        Label(self.frame_inverse_menu, text='Enter matrix dimensions:', font=('arial', 10, 'bold')).grid(row=4, column=1)
+        Label(self.frame_inverse_menu, text='Enter matrix dimensions:', font=('arial', 14, 'bold'), bg='#F9E79F').pack(fill=BOTH, pady=10)
 
         # enter matrix dimensions
         self.m_dimensions = IntVar()
         self.m_dimensions.set(2)
-        OptionMenu(self.frame_inverse_menu, self.m_dimensions, *range(2, 5)).grid(row=4, column=2)
-
-        Button(self.frame_inverse_menu, text='Enter', padx=16, pady=5, command=self.input_matrix).grid(row=5, column=2)
+        OptionMenu(self.frame_inverse_menu, self.m_dimensions, *range(2, 5)).pack(fill=BOTH, pady=10, padx=5)
+        Button(self.frame_inverse_menu, text='Enter', font=('arial', 10, 'bold'), activebackground='green', padx=10, pady=5, command=self.input_matrix).pack(pady=20)
 
         #BACK TO MENU
-        Button(self.frame_inverse_menu, text="Back to Menu", font=('arial', 10, 'bold'), width=15,command=self.back_to_menu).grid(row=6, column=2)
+        Button(self.frame_inverse_menu, text="Back to Menu", font=('arial', 10, 'bold'), activebackground='green', padx=10, pady=5, command=self.back_to_menu_from_dimension).pack()
 
-
-        self.gui_inverse_menu.protocol("WM_DELETE_WINDOW", menu.gui_menu.destroy)
+        self.gui_inverse_menu.protocol("WM_DELETE_WINDOW", menu.gui_menu.destroy) # xóa cửa sổ và thuộc tính của cửa sổ menu
         self.gui_inverse_menu.mainloop()
 
-    def back_to_menu(self):
+    def back_to_menu_from_dimension(self):
         self.gui_inverse_menu.destroy()
         menu.gui_menu.deiconify()
