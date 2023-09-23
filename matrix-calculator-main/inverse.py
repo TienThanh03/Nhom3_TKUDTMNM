@@ -47,8 +47,7 @@ class Inverse:
 
         # go back to menu button
         Button(self.frame_inverse_output, text="Back",font=('arial', 10, 'bold'), width=4, command=self.back_to_menu).grid(
-            row=self.rows + 10,
-            column=1)
+            row=self.rows + 10,column=1)
 
         # display user input
         Label(self.frame_inverse_output, text='Input:', font=('arial', 10, 'bold'), underline=0).grid(row=1, column=1)
@@ -75,7 +74,6 @@ class Inverse:
         self.gui_inverse_menu.destroy()
         self.gui_inverse_input = Toplevel()
         self.gui_inverse_input.title("Matric Calculator")
-
         self.frame_inverse_input = Frame(self.gui_inverse_input, highlightbackground='black', highlightthickness=1)
         self.frame_inverse_input.pack(fill=BOTH, expand=True, padx=5, pady=5)
         # window_dimensions = str(self.m_length.get()**3+90) + "x" + str(self.m_height.get())
@@ -84,7 +82,12 @@ class Inverse:
         # self.gui_inverse_input.resizable(False, False)
 
         Label(self.frame_inverse_input, text="Enter matrix:", font=('arial', 10, 'bold')).grid(row=1, column=1)
+        frame_matrix = Frame(self.frame_inverse_input, highlightbackground='black', highlightthickness=1)
+        frame_matrix.grid(row=2, column=1, columnspan=self.cols+1, padx=10, pady=10)
 
+        for i in range(self.rows):
+            for j in range(self.cols):
+                Entry(frame_matrix, textvariable=text_var[i][j], width=3).grid(row=i, column=j)
         # to create matrix of entry cells we need to create a 2d list of entries
         # thank god to stackoverflow peeps for that
 
