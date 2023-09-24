@@ -115,7 +115,7 @@ class Add:
 
             for j in range(self.cols_get):
                 # for column indications
-                if i == 1:
+                if i == 0:  
                     Label(self.frame_add_input, bg='#F9E79F', text=j + 1).grid(row=0, column=j + 1)
 
                 # append StringVar
@@ -215,7 +215,7 @@ class Add:
         self.rows.set(2)
 
         # create drop down for rows
-        OptionMenu(self.frame_add_menu, self.rows, *range(2, 5)).grid(row=1, column=0, sticky='ew', pady=10)
+        OptionMenu(self.frame_add_menu, self.rows, *range(1, 5)).grid(row=1, column=0, sticky='ew', pady=10)
 
         # "x"
         Label(self.frame_add_menu, text='x', bg='#F9E79F', font=('arial', 14, 'bold')).grid(row=1, column=1)
@@ -225,7 +225,7 @@ class Add:
         self.cols.set(2)
 
         # create drop down for cols
-        OptionMenu(self.frame_add_menu, self.cols, *range(2, 5)).grid(row=1, column=2, sticky='ew')
+        OptionMenu(self.frame_add_menu, self.cols, *range(1, 5)).grid(row=1, column=2, sticky='ew')
 
         # button to next window
         Button(self.frame_add_menu, text='Enter', font=('arial', 10, 'bold'), activebackground='green', padx=10, pady=5, command=self.input_matrix).grid(row=2, column=0, columnspan=3, pady=10)
