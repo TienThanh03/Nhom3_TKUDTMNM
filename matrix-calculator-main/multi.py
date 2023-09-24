@@ -194,8 +194,10 @@ class Multi:
     def back_to_dimensions(self):
         self.gui_multi_input.destroy()
         self.__init__()
-
+    
     def __init__(self):
+        def update_label(*args):
+            selected_value.set(self.ma_cols.get())
         # pre-declare variables
         self.product_matrix = None
         self.matrix_a, self.matrix_b = None, None
@@ -234,16 +236,21 @@ class Multi:
 
         # 'x'
         Label(self.frame_multi_menu, text='x', bg='#F9E79F', font=('arial', 14, 'bold')).grid(row=1, column=1)
-
+        selected_value = StringVar()
+        selected_value.set(2)
         # create var for cols
         self.ma_cols = IntVar()
         self.ma_cols.set(2)
+        # self.ma_cols.trace_add("write", update_label)
         OptionMenu(self.frame_multi_menu, self.ma_cols, *range(1, 5)).grid(row=1, column=2, sticky='ew')
-
+        self.ma_cols.trace_add("write", update_label)
         # B matrix
         self.mb_rows = IntVar()
         # self.mb_rows.set(self.ma_cols.get())
-        Label(self.frame_multi_menu, text="[n]", font=('arial', 10, 'bold'), padx=5, pady=5, bg='#F9E79F').grid(row=3, column=0)
+        
+        label=Label(self.frame_multi_menu, textvariable=selected_value, font=('arial', 10, 'bold'), padx=5, pady=5, bg='#F9E79F').grid(row=3, column=0)
+         
+        
         # OptionMenu(self.frame_multi_menu, self.mb_rows, *range(2, 16)).grid(row=2, column=2)
 
         Label(self.frame_multi_menu, text='x', bg='#F9E79F', font=('arial', 14, 'bold')).grid(row=3, column=1)
