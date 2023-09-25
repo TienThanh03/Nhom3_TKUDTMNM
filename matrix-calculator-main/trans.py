@@ -162,7 +162,6 @@ class Trans:
         menu.gui_menu.withdraw()
         self.gui_trans_menu = Toplevel()
         self.gui_trans_menu.title("Chuyển vị")
-        self.gui_trans_menu.geometry('270x500')
         self.gui_trans_menu.resizable(False, False)
 
         self.frame_trans_menu = Frame(self.gui_trans_menu, highlightbackground='black', highlightthickness=1, bg='#F9E79F', padx=5, pady=5)

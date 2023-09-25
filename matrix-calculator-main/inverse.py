@@ -123,7 +123,7 @@ class Inverse:
                 if i == 0:
                     Label(self.frame_inverse_input, text=j + 1, bg='#F9E79F').grid(row=1, column=j + 1, padx=5)
                 if j == 0:
-                                    Label(self.frame_inverse_input, text=i + 1, bg='#F9E79F').grid(row=i + 2, column=0, padx=5)
+                    Label(self.frame_inverse_input, text=i + 1, bg='#F9E79F').grid(row=i + 2, column=0, padx=5)
 
                 text_var[i].append(StringVar())
                 entries[i].append(
@@ -172,7 +172,7 @@ class Inverse:
         menu.gui_menu.withdraw()
         self.gui_inverse_menu = Toplevel()
         self.gui_inverse_menu.title("Nghịch đảo")
-        self.gui_inverse_menu.geometry('700x550')
+        self.gui_inverse_menu.geometry('400x300')
         self.gui_inverse_menu.resizable(False, False)
 
         self.frame_inverse_menu = Frame(self.gui_inverse_menu, highlightbackground='black', padx=5, pady=5,
