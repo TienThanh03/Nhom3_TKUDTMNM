@@ -1,4 +1,4 @@
-from tkinter import Label, Button, Entry, OptionMenu, IntVar, StringVar, Frame, Toplevel, messagebox
+from tkinter import Label, Button, Entry, OptionMenu, IntVar, StringVar, Frame, Toplevel, messagebox, Scrollbar, Canvas
 from tkinter.constants import BOTH
 import numpy as np
 import menu
@@ -25,34 +25,37 @@ class Multi:
         except (TypeError, Exception):
             pass
 
-        # try:
-        #     # convert product_matrix back to str
-        #     list_mat = [str(i) for i in self.product_matrix]
-
-        #     # remove square brackets
-        #     for i in range(len(list_mat)):
-        #         list_mat[i] = list_mat[i][1:-1]
-
-        #     # return product_matrix as a list of strings
-        #     return list_mat
-
-        # except (NameError, TypeError, Exception):
-        #     Label(self.frame_multi_output, text="Ma trận của bạn").grid(row=1, column=self.cols_b * 2 + 10)
-        #     Label(self.frame_multi_output, text="Không hợp lệ!").grid(row=2, column=self.cols_b * 2 + 10)
-
     def output_matrix(self):
         # create output window
         self.gui_multi_input.destroy()
         self.gui_multi_output = Toplevel()
         self.gui_multi_output.geometry('1000x770')
-        self.gui_multi_output.title("Nhân hai ma trận") 
+        self.gui_multi_output.title("Nhân hai ma trận")
         self.gui_multi_output.resizable(False, False)
 
         # create output frame
         self.frame_multi_output = Frame(self.gui_multi_output, highlightbackground='black', highlightthickness=1, padx=5, pady=5)
         self.frame_multi_output.pack(fill=BOTH, expand=True, padx=5, pady=5)
 
-         #button
+        # create canvas with scrollbars
+        canvas = Canvas(self.frame_multi_output)
+        canvas.pack(fill=BOTH, expand=True)
+
+        v_scrollbar = Scrollbar(canvas, orient="vertical", command=canvas.yview)
+        v_scrollbar.pack(side="right", fill="y")
+        canvas.configure(yscrollcommand=v_scrollbar.set)
+
+        h_scrollbar = Scrollbar(canvas, orient="horizontal", command=canvas.xview)
+        h_scrollbar.pack(side="bottom", fill="x")
+        canvas.configure(xscrollcommand=h_scrollbar.set)
+
+        canvas_frame = Frame(canvas)
+        canvas.create_window((0, 0), window=canvas_frame, anchor="nw")
+
+        canvas_frame.grid_rowconfigure(0, weight=1)
+        canvas_frame.grid_columnconfigure(0, weight=1)
+
+        # button
         self.frame_button = Frame(self.gui_multi_output, bg='#F9E79F', highlightbackground='black', highlightthickness=1, padx=5, pady=5)
         self.frame_button.pack(fill='x', expand=True, padx=5, pady=3)
         Button(self.frame_button, text="Back", font=('arial', 10, 'bold'), width=11, activebackground='green', command=self.back_to_input).grid(row=0, column=1, sticky='e', padx=14)
@@ -60,21 +63,21 @@ class Multi:
         Button(self.frame_button, text="Exit", font=('arial', 10, 'bold'), width=11, activebackground='green', command=exit).grid(row=0, column=2, sticky='e', padx=14)
 
         # display matrix_a input
-        Label(self.frame_multi_output, text='Matrix A:', font=('arial', 14, 'bold'), underline=0).grid(row=0, column=0)
+        Label(canvas_frame, text='Matrix A:', font=('arial', 14, 'bold'), underline=0).grid(row=0, column=0)
 
         for i in range(self.rows_a):
             for j in range(self.cols_a):
-                Label(self.frame_multi_output, text=self.matrix_a[i][j], font=('arial', 12, 'bold'), bd=5).grid(row=i, column=j + 1, sticky='news', padx=5, pady=5)
+                Label(canvas_frame, text=self.matrix_a[i][j], font=('arial', 12, 'bold'), bd=5).grid(row=i, column=j + 1, sticky='news', padx=5, pady=5)
 
         # display matrix_b input
-        Label(self.frame_multi_output, text='Matrix B:', font=('arial', 14, 'bold'), underline=0).grid(row=0, column=self.cols_a + 1)
+        Label(canvas_frame, text='Matrix B:', font=('arial', 14, 'bold'), underline=0).grid(row=0, column=self.cols_a + 1)
 
         for i in range(self.rows_b):
             for j in range(self.cols_b):
-                Label(self.frame_multi_output, text=self.matrix_b[i][j], font=('arial', 12, 'bold'), bd=5).grid(row=i, column=j + self.cols_a + 2)
+                Label(canvas_frame, text=self.matrix_b[i][j], font=('arial', 12, 'bold'), bd=5).grid(row=i, column=j + self.cols_a + 2)
 
         # display product
-        Label(self.frame_multi_output, text='Product:', font=('arial', 14, 'bold'), underline=0).grid(row=self.rows_a * 3, column=0)
+        Label(canvas_frame, text='Product:', font=('arial', 14, 'bold'), underline=0).grid(row=self.rows_a * 3, column=0)
 
         # compute product
         self.product_matrix = self.compute_product()
@@ -82,7 +85,11 @@ class Multi:
         # display product
         for i in range(self.rows_a):
             for j in range(self.cols_b):
-                Label(self.frame_multi_output, text=self.product_matrix[i][j], font=('arial', 12, 'bold'), bd=5).grid(row=i + self.rows_a * 2, column=j + 1)
+                Label(canvas_frame, text=self.product_matrix[i][j], font=('arial', 12, 'bold'), bd=5).grid(row=i + self.rows_a * 2, column=j + 1)
+
+        # configure canvas scrolling
+        canvas_frame.update_idletasks()
+        canvas.config(scrollregion=canvas.bbox("all"))
 
         # gui stuff
         self.gui_multi_output.protocol("WM_DELETE_WINDOW", menu.gui_menu.destroy)
@@ -181,9 +188,9 @@ class Multi:
 
         self.frame_button = Frame(self.gui_multi_input,  bg='#F9E79F', highlightbackground='black', highlightthickness=1, padx=5, pady=5)
         self.frame_button.pack(fill='x', expand=True, padx=5, pady=3)
-        Button(self.frame_button, text="Enter", font=('arial', 10, 'bold'), width=11, activebackground='green', command=get_mat).grid(row=0, column=2, padx=14)
-        Button(self.frame_button, text="Back", font=('arial', 10, 'bold'), width=11, activebackground='green', command=self.back_to_dimensions).grid(row=0, column=1, padx=14)
-        Button(self.frame_button, text="Back to Menu", font=('arial', 10, 'bold'),activebackground='green', command=self.back_to_menu_from_input).grid(row=0, column=0, padx=14)
+        Button(self.frame_button, text="Enter", font=('arial', 10, 'bold'), width=11, activebackground='green', padx=10, pady=5, command=get_mat).grid(row=0, column=2, padx=14)
+        Button(self.frame_button, text="Back", font=('arial', 10, 'bold'), width=11, activebackground='green', padx=14, command=self.back_to_dimensions).grid(row=0, column=1, padx=14)
+        Button(self.frame_button, text="Back to Menu", font=('arial', 10, 'bold'),activebackground='green', pady=10, padx=5, command=self.back_to_menu_from_input).grid(row=0, column=0, padx=14)
 
         # gui stuff
         self.gui_multi_input.protocol("WM_DELETE_WINDOW", menu.gui_menu.destroy)
@@ -200,6 +207,7 @@ class Multi:
     def __init__(self):
         def update_label(*args):
             selected_value.set(self.ma_cols.get())
+
         # pre-declare variables
         self.product_matrix = None
         self.matrix_a, self.matrix_b = None, None
@@ -244,7 +252,6 @@ class Multi:
         # create var for cols
         self.ma_cols = IntVar()
         self.ma_cols.set(2)
-        # self.ma_cols.trace_add("write", update_label)
         OptionMenu(self.frame_multi_menu, self.ma_cols, *range(1, 10)).grid(row=1, column=2, sticky='ew')
         self.ma_cols.trace_add("write", update_label)
         # B matrix
@@ -273,3 +280,6 @@ class Multi:
     def back_to_menu_from_dimensions(self):
         self.gui_multi_menu.destroy()
         menu.gui_menu.deiconify()
+
+if __name__ == "__main__":
+    app = Multi()
