@@ -44,7 +44,8 @@ class Multi:
         # create output window
         self.gui_multi_input.destroy()
         self.gui_multi_output = Toplevel()
-        self.gui_multi_output.title("Multiply")
+        self.gui_multi_output.geometry('1000x770')
+        self.gui_multi_output.title("Nhân hai ma trận") 
         self.gui_multi_output.resizable(False, False)
 
         # create output frame
@@ -73,7 +74,7 @@ class Multi:
                 Label(self.frame_multi_output, text=self.matrix_b[i][j], font=('arial', 12, 'bold'), bd=5).grid(row=i, column=j + self.cols_a + 2)
 
         # display product
-        Label(self.frame_multi_output, text='Product:', font=('arial', 14, 'bold'), underline=0).grid(row=self.rows_a * 2, column=0)
+        Label(self.frame_multi_output, text='Product:', font=('arial', 14, 'bold'), underline=0).grid(row=self.rows_a * 3, column=0)
 
         # compute product
         self.product_matrix = self.compute_product()
@@ -95,7 +96,8 @@ class Multi:
         # create input window
         self.gui_multi_menu.destroy()
         self.gui_multi_input = Toplevel()
-        self.gui_multi_input.title("Multiply")
+        self.gui_multi_input.title("Nhân hai ma trận")
+        self.gui_multi_input.geometry('900x600')
         self.gui_multi_input.resizable(False, False)
 
         # create input frame
@@ -213,6 +215,7 @@ class Multi:
         menu.gui_menu.withdraw()
         self.gui_multi_menu = Toplevel()
         self.gui_multi_menu.title("Multiply")
+        self.gui_multi_menu.geometry('240x395')
         self.gui_multi_menu.resizable(False, False)
 
         # create sub-menu frame
@@ -232,7 +235,7 @@ class Multi:
         self.ma_rows.set(2)
 
         # drop down for rows
-        OptionMenu(self.frame_multi_menu, self.ma_rows, *range(1, 5)).grid(row=1, column=0, sticky='ew', pady=10)
+        OptionMenu(self.frame_multi_menu, self.ma_rows, *range(1, 10)).grid(row=1, column=0, sticky='ew', pady=10)
 
         # 'x'
         Label(self.frame_multi_menu, text='x', bg='#F9E79F', font=('arial', 14, 'bold')).grid(row=1, column=1)
@@ -242,7 +245,7 @@ class Multi:
         self.ma_cols = IntVar()
         self.ma_cols.set(2)
         # self.ma_cols.trace_add("write", update_label)
-        OptionMenu(self.frame_multi_menu, self.ma_cols, *range(1, 5)).grid(row=1, column=2, sticky='ew')
+        OptionMenu(self.frame_multi_menu, self.ma_cols, *range(1, 10)).grid(row=1, column=2, sticky='ew')
         self.ma_cols.trace_add("write", update_label)
         # B matrix
         self.mb_rows = IntVar()
@@ -257,7 +260,7 @@ class Multi:
 
         self.mb_cols = IntVar()
         self.mb_cols.set(2)
-        OptionMenu(self.frame_multi_menu, self.mb_cols, *range(1, 5)).grid(row=3, column=2, sticky='ew')
+        OptionMenu(self.frame_multi_menu, self.mb_cols, *range(1, 10)).grid(row=3, column=2, sticky='ew')
 
         # in order to move to input window
         Button(self.frame_multi_menu, text='Enter', font=('arial', 10, 'bold'), activebackground='green', padx=10, pady=5, command=self.input_matrix).grid(row=4, column=0, columnspan=3, pady=10)
