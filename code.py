@@ -1,7 +1,7 @@
 import sys
 import sympy as sp
 import matplotlib.pyplot as plt
-from PyQt6 import QtWidgets
+from PyQt6 import QtWidgets, QtGui
 
 class MathOperationsApp(QtWidgets.QWidget):
     def __init__(self):
@@ -14,27 +14,27 @@ class MathOperationsApp(QtWidgets.QWidget):
         self.n = sp.symbols('n')
         self.sequence = 1 / self.n
 
-        # Create GUI elements
+        # Tạo các thành phần giao diện
         self.init_ui()
 
     def init_ui(self):
-        # Create labels
+        # Tạo nhãn
         self.label = QtWidgets.QLabel("Chọn tùy chọn:")
 
-        # Create input field
+        # Tạo ô nhập
         self.input_field = QtWidgets.QLineEdit()
 
-        # Create buttons
+        # Tạo nút chức năng
         self.derivative_button = QtWidgets.QPushButton("Tính đạo hàm")
         self.integral_button = QtWidgets.QPushButton("Tính tích phân")
         self.equation_button = QtWidgets.QPushButton("Giải phương trình")
         self.convergence_button = QtWidgets.QPushButton("Xác định tính hội tụ")
         self.exit_button = QtWidgets.QPushButton("Thoát")
 
-        # Create a plot area
-        self.plot_widget = QtWidgets.QWidget()
+        # Tạo khu vực vẽ biểu đồ
+        self.plot_widget = QtWidgets.QLabel()
 
-        # Set up layout
+        # Thiết lập layout
         layout = QtWidgets.QVBoxLayout()
         layout.addWidget(self.label)
         layout.addWidget(self.input_field)
@@ -45,7 +45,7 @@ class MathOperationsApp(QtWidgets.QWidget):
         layout.addWidget(self.exit_button)
         layout.addWidget(self.plot_widget)
 
-        # Connect buttons to functions
+        # Kết nối nút với các hàm chức năng
         self.derivative_button.clicked.connect(self.calculate_derivative)
         self.integral_button.clicked.connect(self.calculate_integral)
         self.equation_button.clicked.connect(self.solve_equation)
@@ -82,25 +82,36 @@ class MathOperationsApp(QtWidgets.QWidget):
             self.show_result("Phương trình không hợp lệ.")
 
     def check_convergence(self):
-        limit = sp.limit(self.sequence, self.n, sp.oo)
-        self.show_result(f"Giới hạn của dãy số là: {limit}")
+        # Nhập giới hạn từ người dùng
+        limit_point_str, ok = QtWidgets.QInputDialog.getText(self, "Nhập giới hạn", "Nhập giá trị giới hạn:")
 
-        # Create and display the sequence plot
-        n_values = range(1, 21)
-        sequence_values = [sp.N(self.sequence.subs(self.n, value)) for value in n_values]
-        plt.figure()
-        plt.plot(n_values, sequence_values)
-        plt.xlabel('n')
-        plt.ylabel('Giá trị của dãy số')
-        plt.title('Tính hội tụ của dãy số')
-        plt.grid(True)
-        plt.savefig('sequence_plot.png')
-        plt.close()
+        if ok:
+            try:
+                # Chuyển đổi giá trị nhập vào thành giá trị số
+                limit_point = float(limit_point_str)
 
-        # Display the plot in the GUI
-        plot_image = QtGui.QImage('sequence_plot.png')
-        plot_pixmap = QtGui.QPixmap.fromImage(plot_image)
-        self.plot_widget.setPixmap(plot_pixmap)
+                # Tính giới hạn số học
+                limit = sp.limit(self.sequence, self.n, limit_point)
+                self.show_result(f"Giới hạn của dãy số khi n tiến tới {limit_point} là: {limit}")
+
+                # Tạo và hiển thị biểu đồ của dãy số
+                n_values = range(1, 21)
+                sequence_values = [sp.N(self.sequence.subs(self.n, value)) for value in n_values]
+                plt.figure()
+                plt.plot(n_values, sequence_values)
+                plt.xlabel('n')
+                plt.ylabel('Giá trị của dãy số')
+                plt.title(f'Tính hội tụ của dãy số khi n tiến tới {limit_point}')
+                plt.grid(True)
+                plt.savefig('sequence_plot.png')
+                plt.close()
+
+                # Hiển thị biểu đồ trong giao diện
+                pixmap = QtGui.QPixmap('sequence_plot.png')
+                self.plot_widget.setPixmap(pixmap)
+
+            except ValueError:
+                self.show_result("Giá trị giới hạn không hợp lệ.")
 
     def show_result(self, result):
         msg_box = QtWidgets.QMessageBox()
@@ -112,10 +123,9 @@ class MathOperationsApp(QtWidgets.QWidget):
     def close_app(self):
         self.close()
 
-
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     window = MathOperationsApp()
-    window.setWindowTitle("Math Operations")
+    window.setWindowTitle("Các Phép Tính Toán")
     window.show()
     sys.exit(app.exec())
