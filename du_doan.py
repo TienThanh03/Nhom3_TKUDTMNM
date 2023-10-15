@@ -1,53 +1,61 @@
 import numpy as np
-#import tensorflow as tf
-import matplotlib.pyplot as plt
-import tensorflow.compat.v1 as tf
 import pandas as pd
+import matplotlib.pyplot as plt
+import tensorflow as tf
 from numpy import array
-tf.disable_v2_behavior()
-# Generating random linear data
-# There will be 50 data points ranging from 0 to 50
-'''df=pd.read_csv('Student_Performance.csv',index_col=0,header = 0)
-x = array(df.iloc[:900,:5])
-y = array(df.iloc[:900,5:6])
-'''
-#Tạo tâp giá trị x và y
-x = np.linspace(0, 50, 50)
-y = np.linspace(0, 50, 50)
- 
-# Cộng thêm nhiễu cho tập x và y để có tập dữ liệu ngẫu nhiên
-x += np.random.uniform(-4, 4, 50)
-y += np.random.uniform(-4, 4, 50)
-n = len(x) # Số lượng dữ liệu
+import csv
+
+tf.compat.v1.disable_v2_behavior()
+
+""" file1 = 'Student_Performance.csv'
+data_set1 = []
+with open(file1, mode='r', encoding = 'utf-8-sig') as file:
+    reader = csv.reader(file)
+    for row in reader:
+        data_set1.append(row)
+in_data1 = np.array(data_set1)
+print(in_data1)
+print(in_data1[:][0]) """
+
+df = pd.read_csv('A:\\Tai_Lieu_Ki_5\\Thiet_ke_phan_mem\\Nhom3_TKUDTMNM-Buoi5\\Nhom3_TKUDTMNM-Buoi5\\Student_Performance.csv')
+in_data = array(df.iloc[:,:])
+hours_studies = np.array(in_data[:, 0])
+print(hours_studies)
+performance_index = np.array(in_data[:, 5])
+
 # Plot of Training Data
-plt.scatter(x, y)
-plt.xlabel('x')
-plt.ylabel('y')
+plt.scatter(hours_studies, performance_index)
+plt.xlabel('hours_studies')
+plt.ylabel('performance_index')
 plt.title("Training Data")
 plt.show()
-# Tạo model cho tập dữ liệu
-X = tf.placeholder("float")
-Y = tf.placeholder("float")
+
+X = tf.compat.v1.placeholder(tf.float32, shape=None)
+Y = tf.compat.v1.placeholder(tf.float32, shape=None)
+
+n = len(hours_studies)
+print(n)
 # khởi tạo biến w và b
 W = tf.Variable(np.random.randn(), name = "W")
+print(W)
 b = tf.Variable(np.random.randn(), name = "b")
 # thiết lập tốc độ học
 learning_rate = 0.01
 # số vòng lặp
 training_epochs = 100
 # Hàm tuyến tính
-y_pred = tf.add(tf.multiply(X, W), b)
+y_pred = tf.compat.v1.add(tf.multiply(X, W), b)
  
 # Mean Squared Error Cost Function
-cost = tf.reduce_sum(tf.pow(y_pred-Y, 2)) / (2 * n)
+cost = tf.compat.v1.reduce_sum(tf.pow(y_pred-Y, 2)) / (2 * n)
  
 # Tối ưu bằng Gradient Descent 
-optimizer = tf.train.GradientDescentOptimizer(learning_rate).minimize(cost)
+optimizer = tf.compat.v1.train.GradientDescentOptimizer(learning_rate).minimize(cost)
  
 # Thiết lập Global Variables 
-init = tf.global_variables_initializer()
+init = tf.compat.v1.global_variables_initializer()
 # Starting the Tensorflow Session
-with tf.Session() as sess:
+with tf.compat.v1.Session() as sess:
      
     # Initializing the Variables
     sess.run(init)
@@ -56,25 +64,24 @@ with tf.Session() as sess:
     for epoch in range(training_epochs):
          
         # Feeding each data point into the optimizer using Feed Dictionary
-        for (_x, _y) in zip(x, y):
+        for (_x, _y) in zip(hours_studies, performance_index):
             sess.run(optimizer, feed_dict = {X : _x, Y : _y})
          
         # Displaying the result after every 50 epochs
         if (epoch + 1) % 50 == 0:
             # Calculating the cost a every epoch
-            c = sess.run(cost, feed_dict = {X : x, Y : y})
+            c = sess.run(cost, feed_dict = {X : hours_studies, Y : performance_index})
             print("Epoch", (epoch + 1), ": cost =", c, "W =", sess.run(W), "b =", sess.run(b))
-     
-    # Storing necessary values to be used outside the Session
-    training_cost = sess.run(cost, feed_dict ={X: x, Y: y})
+
+    training_cost = sess.run(cost, feed_dict ={X : hours_studies, Y : performance_index})
     weight = sess.run(W)
     bias = sess.run(b)
 # Calculating the predictions
-predictions = weight * x + bias
+predictions = weight * hours_studies + bias
 print("Training cost =", training_cost, "Weight =", weight, "bias =", bias, '\n')
 # Plotting the Results
-plt.plot(x, y, 'ro', label ='Original data')
-plt.plot(x, predictions, label ='Fitted line')
+plt.plot(hours_studies, performance_index, 'ro', label ='Original data')
+plt.plot(hours_studies, predictions, label ='Fitted line')
 plt.title('Linear Regression Result')
 plt.legend()
 plt.show()
