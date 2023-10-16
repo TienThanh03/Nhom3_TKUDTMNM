@@ -1,10 +1,7 @@
-# lựa chọn ảnh trước khi tạo các ảnh mới
-# khuyến nghị lựa chọn ảnh có kích thước nhỏ hơn 700x700
-
 import cv2
 import sys
 from PyQt6.QtWidgets import QApplication, QGridLayout, QMainWindow, QWidget, QPushButton, QVBoxLayout, QLabel, QHBoxLayout, QFileDialog
-from PyQt6.QtGui import QImage, QPixmap, QImageReader
+from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt
 import numpy as np
 import matplotlib.pyplot as plt
@@ -30,14 +27,18 @@ class ImageApp(QMainWindow):
         self.btn_histogram = QPushButton("Histogram", self)
         self.btn_gray = QPushButton("Tạo ảnh xám", self)
         self.btn_flip = QPushButton("Lật ảnh", self)
-        self.btn_rotate = QPushButton("Xoay ảnh")
+        self.btn_rotate_left = QPushButton("Xoay trái", self)
+        self.btn_rotate_right = QPushButton("Xoay phải", self)
+        self.btn_flip_upside_down = QPushButton("Úp ngược ảnh", self)
         self.btn_cartoon = QPushButton("Tạo ảnh cartoon", self)
 
         self.btn_select_image.clicked.connect(self.open_file_dialog)
         self.btn_histogram.clicked.connect(self.plot_histogram)
         self.btn_gray.clicked.connect(self.create_gray_image)
         self.btn_flip.clicked.connect(self.create_flip_image)
-        self.btn_rotate.clicked.connect(self.create_rotate_image)
+        self.btn_rotate_left.clicked.connect(self.create_rotate_left_image)
+        self.btn_rotate_right.clicked.connect(self.create_rotate_right_image)
+        self.btn_flip_upside_down.clicked.connect(self.create_flip_upside_down_image)
         self.btn_cartoon.clicked.connect(self.create_cartoon_image)
 
         left_layout = QVBoxLayout()
@@ -47,7 +48,9 @@ class ImageApp(QMainWindow):
         right_layout.addWidget(self.btn_histogram)
         right_layout.addWidget(self.btn_gray)
         right_layout.addWidget(self.btn_flip)
-        right_layout.addWidget(self.btn_rotate)
+        right_layout.addWidget(self.btn_rotate_left)
+        right_layout.addWidget(self.btn_rotate_right)
+        right_layout.addWidget(self.btn_flip_upside_down)
         right_layout.addWidget(self.btn_cartoon)
         right_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
@@ -55,12 +58,10 @@ class ImageApp(QMainWindow):
         main_layout.addLayout(left_layout)
         main_layout.addLayout(right_layout)
 
-
         self.central_widget.setLayout(main_layout)
 
         self.filename = None
         self.count = 0
-        self.rotate = False
         self.flipped = False
         self.gray = False
 
@@ -79,21 +80,16 @@ class ImageApp(QMainWindow):
 
     def plot_histogram(self):
         image = cv2.imread(self.filename)
-        # Chia hình ảnh thành các kênh tương ứng, sau đó khởi tạo
-        # Tuple tên kênh cùng với hình để vẽ đồ thị
         chans = cv2.split(image)
         colors = ("b", "g", "r")
         plt.figure()
         plt.title("Histogram for Original Image")
         plt.xlabel("Bins")
         plt.ylabel("# of Pixels")
-        # Vòng lặp các kênh hình ảnh
         for (chan, color) in zip(chans, colors):
-            # Tạo biểu đồ cho kênh hiện tại và vẽ sơ đồ đó
             hist = cv2.calcHist([chan], [0], None, [256], [0, 256])
             plt.plot(hist, color=color)
             plt.xlim([0, 256])
-        # Hiển thị biểu đồ
         plt.show()
 
     def create_gray_image(self):
@@ -102,7 +98,6 @@ class ImageApp(QMainWindow):
         if self.gray:
             cv2.imshow('Gray image', image)
         else:
-            # Hiển thị ảnh xám
             cv2.imshow('Gray image', gray)
         self.gray = not self.gray
     
@@ -111,27 +106,33 @@ class ImageApp(QMainWindow):
         if self.flipped:
             cv2.imshow('Flip image', image)
         else:
-            # Lật ảnh theo chiều Y
             flipped_img = cv2.flip(image, 1)
             cv2.imshow('Flip image', flipped_img)
         self.flipped = not self.flipped
-    
-    def create_rotate_image(self):
+
+    def create_rotate_left_image(self):
+        image = cv2.imread(self.filename)
+        rotated_img = cv2.rotate(image, cv2.ROTATE_90_COUNTERCLOCKWISE)
+        cv2.imshow('Rotate Left image', rotated_img)
+
+    def create_rotate_right_image(self):
         image = cv2.imread(self.filename)
         rotated_img = cv2.rotate(image, cv2.ROTATE_90_CLOCKWISE)
-        cv2.imshow('Rotate image', rotated_img)
-    
+        cv2.imshow('Rotate Right image', rotated_img)
+
+    def create_flip_upside_down_image(self):
+        image = cv2.imread(self.filename)
+        flipped_img = cv2.flip(image, 0)
+        cv2.imshow('Flip Upside Down image', flipped_img)
+
     def create_cartoon_image(self):
-        image = cv2.imread(self.filename, cv2.IMREAD_UNCHANGED) # trả về ảnh bao gồm cả kênh alpha (có độ trong suốt)
-        cv2.imshow("test",image)
+        image = cv2.imread(self.filename, cv2.IMREAD_UNCHANGED)
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         blurImage = cv2.medianBlur(gray, 5)
         edges = cv2.adaptiveThreshold(blurImage, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 9, 9)
         color = cv2.bilateralFilter(image, 9, 300, 300)
-        cartoon = cv2.bitwise_and(color, color, mask = edges)
-        # Hiển thị ảnh cartoon
+        cartoon = cv2.bitwise_and(color, color, mask=edges)
         cv2.imshow("Cartoon image", cartoon)
-
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
