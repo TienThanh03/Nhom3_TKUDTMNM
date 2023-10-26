@@ -68,4 +68,19 @@ grayscale_button.pack()
 edge_button = Button(root, text="Phát Hiện Biên", command=edge_detection)
 edge_button.pack()
 
+# Tạo cửa sổ tkinter
+root = tk.Tk()
+root.title("bai tap")
+
+# Tạo thanh trượt
+scale_label = ttk.Label(root, text="Tỉ lệ zoom:")
+scale_label.pack()
+
+scale_slider = ttk.Scale(root, from_=0.1, to=5, orient="horizontal", command=on_scale_change)
+scale_slider.set(1.0)  # Giá trị mặc định
+scale_slider.pack()
+
+# Tạo nút nhấn
+rotate_button = ttk.Button(root, text="quay ảnh", command=rotate_image)
+rotate_button.pack()
 root.mainloop()
