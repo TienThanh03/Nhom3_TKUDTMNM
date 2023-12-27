@@ -3,8 +3,7 @@ from tkinter import filedialog
 from filter_frame import FilterFrame
 from adjust_frame import AdjustFrame
 import cv2  
-from PIL import Image, ImageTk
-import tkinter as tk
+
 
 class EditBar(Frame):
 
@@ -122,13 +121,16 @@ class EditBar(Frame):
     def crop_button_released(self, event):
         if (self.master.original_image is not None):
             if self.winfo_containing(event.x_root, event.y_root) == self.crop_button:
-                if self.master.is_image_selected:
-                    if self.master.is_draw_state:
-                        self.master.image_viewer.deactivate_draw()
-                    if self.master.is_crop_state:
-                        self.master.image_viewer.deactivate_crop()
-                    else:
-                        self.master.image_viewer.activate_crop()
+                try:
+                    if self.master.is_image_selected:
+                        if self.master.is_draw_state:
+                            self.master.image_viewer.deactivate_draw()
+                        if self.master.is_crop_state:
+                            self.master.image_viewer.deactivate_crop()
+                        else:
+                            self.master.image_viewer.activate_crop()
+                except:
+                    messagebox.showerror("Lỗi", "Chọn vùng cắt không hợp lệ")
         else:
             messagebox.showerror("Lỗi", "Không có file để thao tác")
 

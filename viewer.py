@@ -1,4 +1,4 @@
-from tkinter import Frame, Canvas, CENTER, ROUND
+from tkinter import Frame, Canvas, CENTER, ROUND, messagebox
 from PIL import Image, ImageTk
 import cv2
 
@@ -31,6 +31,7 @@ class ImageViewer(Frame):
             image = img
 
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+            
         height, width, channels = image.shape
         ratio = height / width
 
@@ -114,6 +115,10 @@ class ImageViewer(Frame):
                                                          self.crop_end_x, self.crop_end_y, width=1)
 
     def end_crop(self, event):
+        if self.crop_end_x < 0:
+            self.crop_end_x=0
+        if self.crop_end_y < 0:
+            self.crop_end_y=0
         if self.crop_start_x <= self.crop_end_x and self.crop_start_y <= self.crop_end_y:
             start_x = int(self.crop_start_x * self.ratio)
             start_y = int(self.crop_start_y * self.ratio)
