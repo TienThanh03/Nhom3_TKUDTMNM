@@ -6,7 +6,7 @@ import cv2
 class ImageViewer(Frame):
 
     def __init__(self, master=None):
-        Frame.__init__(self, master=master, bg="MistyRose3", width=900, height=600)
+        Frame.__init__(self, master=master, bg="#f5eaab", width=1000, height=650)
 
         self.shown_image = None
         self.x = 0
@@ -19,7 +19,7 @@ class ImageViewer(Frame):
         self.rectangle_id = 0
         self.ratio = 0
 
-        self.canvas = Canvas(self, bg="MistyRose3", width=900, height=600)
+        self.canvas = Canvas(self, bg="#ccc", width=900, height=600)
         self.canvas.place(relx=0.5, rely=0.5, anchor=CENTER)
 
     def show_image(self, img=None):

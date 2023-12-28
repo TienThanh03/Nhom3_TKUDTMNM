@@ -9,19 +9,29 @@ class EditBar(Frame):
 
     def __init__(self, master=None):
         Frame.__init__(self, master=master)
-        self.capture_button = Button(self, font="y", background="MistyRose3", text="Capture from Camera", relief="sunken")
-       
 
-        self.new_button = Button(self,font="y",background="MistyRose3", text="Select Photo", relief="sunken")
-        self.save_button = Button(self,font="y",background="dark sea green", text="Save", relief="sunken")
-        self.save_as_button = Button(self,font="y",background="dark sea green", text="Save As", relief="sunken")
-        self.draw_button = Button(self, font="y",background="MistyRose3",text="Draw", relief="sunken")
-        self.crop_button = Button(self, font="y",background="MistyRose3",text="Crop", relief="sunken")
-        self.filter_button = Button(self, font="y",background="MistyRose3",text="Filter", relief="sunken")
-        self.adjust_button = Button(self, font="y",background="MistyRose3",text="Adjust", relief="sunken")
-        self.undo_button = Button(self,background="#ffbe98", font="y",text="Undo", relief="raised")
-        self.redo_button = Button(self,background="#ffbe98", font="y",text="Redo", relief="raised")
-        self.clear_button = Button(self,background="firebrick2", font="y",text="Clear", relief="sunken")
+        self.capture_button = Button(self, font=("arial bold", 12), text="Chụp ảnh", width=10, activebackground='green',
+                                 background="#28217a", foreground='white')
+        self.new_button = Button(self, font=("arial bold", 12), text="Chọn ảnh", width=10, activebackground='green',
+                                 background="#28217a", foreground='white')
+        self.save_button = Button(self, font=("arial bold", 12), text="Lưu", width=10, activebackground='green',
+                                  background="#28217a", foreground='white')
+        self.save_as_button = Button(self, font=("arial bold", 12), text="Lưu ảnh mới", width=10, activebackground='green',
+                                     background="#28217a", foreground='white')
+        self.draw_button = Button(self, font=("arial bold", 12), text="Vẽ", width=10, activebackground='green',
+                                  background="#28217a", foreground='white')
+        self.crop_button = Button(self, font=("arial bold", 12), text="Cắt", width=10, activebackground='green',
+                                  background="#28217a", foreground='white')
+        self.filter_button = Button(self, font=("arial bold", 12), text="Bộ lọc", width=10, activebackground='green',
+                                    background="#28217a", foreground='white')
+        self.adjust_button = Button(self, font=("arial bold", 12), text="Điều chỉnh", width=10, activebackground='green',
+                                    background="#28217a", foreground='white')
+        self.undo_button = Button(self,background="#28217a", font=("arial bold", 12), text="Hoàn tác",width=10,
+                                  activebackground='green', foreground='white')
+        self.redo_button = Button(self,background="#28217a", font=("arial bold", 12), text="Làm lại",width=10,
+                                  activebackground='green', foreground='white')
+        self.clear_button = Button(self, font=("arial bold", 12), text="Hoàn nguyên", width=10, activebackground='green',
+                                   background="#28217a", foreground='white')
         
         self.capture_button.bind("<ButtonRelease>", self.capture_button_released)
         self.new_button.bind("<ButtonRelease>", self.new_button_released)
@@ -35,17 +45,17 @@ class EditBar(Frame):
         self.redo_button.bind("<ButtonRelease>", self.redo_button_released)
         self.clear_button.bind("<ButtonRelease>", self.clear_button_released)
 
-        self.capture_button.pack(side=LEFT)
-        self.new_button.pack(side=LEFT)
-        self.save_button.pack(side=LEFT)
-        self.save_as_button.pack(side=LEFT)
-        self.draw_button.pack(side=LEFT)
-        self.crop_button.pack(side=LEFT)
-        self.filter_button.pack(side=LEFT)
-        self.adjust_button.pack(side=LEFT)
-        self.undo_button.pack(side = LEFT)
-        self.redo_button.pack(side = LEFT)
-        self.clear_button.pack( side=LEFT)
+        self.capture_button.pack(side=LEFT, padx=3)
+        self.new_button.pack(side=LEFT, padx=3)
+        self.save_button.pack(side=LEFT, padx=3)
+        self.save_as_button.pack(side=LEFT, padx=3)
+        self.draw_button.pack(side=LEFT, padx=3)
+        self.crop_button.pack(side=LEFT, padx=3)
+        self.filter_button.pack(side=LEFT, padx=3)
+        self.adjust_button.pack(side=LEFT, padx=3)
+        self.undo_button.pack(side = LEFT, padx=3)
+        self.redo_button.pack(side = LEFT, padx=3)
+        self.clear_button.pack( side=LEFT, padx=3)
 
     def new_button_released(self, event):
         if self.winfo_containing(event.x_root, event.y_root) == self.new_button:
@@ -69,7 +79,8 @@ class EditBar(Frame):
                 self.master.r = []
                 self.master.u.append(self.master.undo_save)
             elif (image is None) and (self.master.original_image is None):
-                messagebox.showerror("Lỗi", "Không thể mở file")
+                messagebox.showinfo("Thông báo", "Chưa tải ảnh lên")
+
     def save_button_released(self, event):
         if (self.master.original_image is not None):
             if self.winfo_containing(event.x_root, event.y_root) == self.save_button:
@@ -83,7 +94,7 @@ class EditBar(Frame):
                     image_filename = self.master.filename
                     cv2.imwrite(image_filename, save_image)
         else:
-            messagebox.showerror("Lỗi", "Không có file để thao tác")
+            messagebox.showinfo("Thông báo", "Chưa tải ảnh lên")
 
     def save_as_button_released(self, event):
         if (self.master.original_image is not None):
@@ -103,7 +114,7 @@ class EditBar(Frame):
 
                     self.master.filename = filename
         else:
-            messagebox.showerror("Lỗi", "Không có file để thao tác")
+            messagebox.showinfo("Thông báo", "Chưa tải ảnh lên")
 
     def draw_button_released(self, event):
         if (self.master.original_image is not None):
@@ -116,7 +127,7 @@ class EditBar(Frame):
                     else:
                         self.master.image_viewer.activate_draw()
         else:
-            messagebox.showerror("Lỗi", "Không có file để thao tác")
+            messagebox.showinfo("Thông báo", "Chưa tải ảnh lên")
 
     def crop_button_released(self, event):
         if (self.master.original_image is not None):
@@ -132,7 +143,7 @@ class EditBar(Frame):
                 except:
                     messagebox.showerror("Lỗi", "Chọn vùng cắt không hợp lệ")
         else:
-            messagebox.showerror("Lỗi", "Không có file để thao tác")
+            messagebox.showinfo("Thông báo", "Chưa tải ảnh lên")
 
     def filter_button_released(self, event):
         if (self.master.original_image is not None):
@@ -146,7 +157,7 @@ class EditBar(Frame):
                     self.master.filter_frame = FilterFrame(master=self.master)
                     self.master.filter_frame.grab_set()
         else:
-            messagebox.showerror("Lỗi", "Không có file để thao tác")
+            messagebox.showinfo("Thông báo", "Chưa tải ảnh lên")
 
     def adjust_button_released(self, event):
         if (self.master.original_image is not None):
@@ -180,7 +191,7 @@ class EditBar(Frame):
                     self.master.u.append(self.master.undo_save)'''
                     self.master.image_viewer.show_image()
         else:
-            messagebox.showerror("Lỗi", "Không có file để thao tác")
+            messagebox.showinfo("Thông báo", "Chưa tải ảnh lên")
 
     def undo_button_released(self, event):
         if (self.master.original_image is not None):
@@ -199,7 +210,7 @@ class EditBar(Frame):
                         pass
                     self.master.image_viewer.show_image()
         else:
-            messagebox.showerror("Lỗi", "Không có file để thao tác")
+            messagebox.showinfo("Thông báo", "Chưa tải ảnh lên")
 
     def redo_button_released(self, event):
         if (self.master.original_image is not None):
@@ -217,7 +228,7 @@ class EditBar(Frame):
                         pass
                     self.master.image_viewer.show_image()
         else:
-            messagebox.showerror("Lỗi", "Không có file để thao tác")
+            messagebox.showinfo("Thông báo", "Chưa tải ảnh lên")
     def open_camera(self):
         def save_captured_image( captured_image):
             if captured_image is not None:
