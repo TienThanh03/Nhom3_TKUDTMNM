@@ -6,7 +6,6 @@ import cv2
 
 
 class EditBar(Frame):
-
     def __init__(self, master=None):
         Frame.__init__(self, master=master)
 
@@ -30,7 +29,7 @@ class EditBar(Frame):
                                   activebackground='green', foreground='white')
         self.redo_button = Button(self,background="#28217a", font=("arial bold", 12), text="Làm lại",width=10,
                                   activebackground='green', foreground='white')
-        self.clear_button = Button(self, font=("arial bold", 12), text="Hoàn nguyên", width=10, activebackground='green',
+        self.clear_button = Button(self, font=("arial bold", 12), text="Xóa", width=10, activebackground='green',
                                    background="#28217a", foreground='white')
         
         self.capture_button.bind("<ButtonRelease>", self.capture_button_released)
@@ -93,6 +92,7 @@ class EditBar(Frame):
                     save_image = self.master.processed_image
                     image_filename = self.master.filename
                     cv2.imwrite(image_filename, save_image)
+                    messagebox.showinfo("Thông báo", "Lưu thành công")
         else:
             messagebox.showinfo("Thông báo", "Chưa tải ảnh lên")
 
@@ -111,7 +111,7 @@ class EditBar(Frame):
 
                     save_image = self.master.processed_image
                     cv2.imwrite(filename, save_image)
-
+                    messagebox.showinfo("Thông báo", "Lưu thành công")
                     self.master.filename = filename
         else:
             messagebox.showinfo("Thông báo", "Chưa tải ảnh lên")
@@ -170,9 +170,8 @@ class EditBar(Frame):
 
                     self.master.adjust_frame = AdjustFrame(master=self.master)
                     self.master.adjust_frame.grab_set()
-
         else:
-            messagebox.showerror("Lỗi", "Không có file để thao tác")
+            messagebox.showinfo("Thông báo", "Chưa tải ảnh lên")
 
     def clear_button_released(self, event):
         if (self.master.original_image is not None):

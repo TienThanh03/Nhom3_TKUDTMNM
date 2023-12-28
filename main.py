@@ -29,3 +29,7 @@ class Main(tk.Tk):
         self.editbar.pack(pady=10, padx=10)
         separator1.pack(fill=tk.X, padx=20)
         self.image_viewer.pack(fill=tk.BOTH, padx=20, pady=5, expand=1)
+
+
+root = Main()
+root.mainloop()
